@@ -15,14 +15,16 @@ app.get('/time',function(req,res){
 
 	let date = [year,month,day];
 
-	// console.log(chalk.yellow.bgBlue("Connected " + moment(year+month+day,"YYYYMMDD")))
+	console.log(chalk.yellow.bgBlue("Connected "))
+	if (day==null&&month==null&&year==null) {
+		console.log(chalk.yellow.bgBlue("Empty"))
+	}
 	let tujuh_hari = moment(date).add(7,'d').format("YYYY/MM/DD");
 	let empat_puluh_hari = moment(date).add(40,'d').format("YYYY/MM/DD");
 	let seratus_hari = moment(date).add(100,'d').format("YYYY/MM/DD");
 	let satu_tahun = moment(date).add(1,'y').format("YYYY/MM/DD");
 	let dua_tahun = moment(date).add(2,'y').format("YYYY/MM/DD");
 	let seribu_hari = moment(date).add(1000,'d').format("YYYY/MM/DD");
-	// console.log(chalk.yellow.bgRed("Connected "+date+" kesatu : "+kesatu+" kedua : "+kedua+" ketiga : "+ketiga+" keempat : "+keempat)+" kelima : "+kelima+" keenam : "+keenam);
 
 	let data_selamatan = {
 		tanggal:date,
@@ -38,10 +40,24 @@ app.get('/time',function(req,res){
 
 app.get('/time-converter',function(req,res){
 
-	let timezone1 = moment().tz(req.query.t1).format();
-	let timezone2 = moment().tz(req.query.t2).format();
+	let timezone1 = moment().tz(req.query.t1)||'';
+	let timezone2 = moment().tz(req.query.t2)||'';
 	let date = moment().utc().format();
+	console.log(chalk.red.bgYellow("Connected "))
 
+	if(timezone1!=''&&timezone2!=''){
+			timezone1 = timezone1.format();
+			timezone2 = timezone2.format();
+			console.log(chalk.red.bgYellow("Input t1 = "+req.query.t1+" t2 = "+req.query.t2))
+	}else if (timezone1!=''&&timezone2=='') {
+			timezone1 = timezone1.format();
+			console.log(chalk.red.bgYellow("Input t1 = "+req.query.t1))
+	}else if (timezone2!=''&&timezone1=='') {
+			timezone2 = timezone2.format();
+			console.log(chalk.red.bgYellow("Input t2 = "+req.query.t2))
+	}else{
+			console.log(chalk.red.bgYellow("Empty"))
+	}
 
 	let timezone = {
 		date:{		Tanggal:date.substring(0,10),
@@ -58,8 +74,6 @@ app.get('/time-converter',function(req,res){
 	}
 
 	res.json(timezone)
-	// console.log(moment().add(1,'h'))
-	// console.log(moment().tz(timezone1).format()+"    "+moment().tz(timezone2).format())
 
 })
 
